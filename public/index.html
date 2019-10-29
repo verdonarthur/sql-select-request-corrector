@@ -12,32 +12,37 @@
 
 <body>
     <header>
-        <nav>NAV</nav>
+        <nav class="navbar">NAV</nav>
     </header>
 
-    <main>
-        <div>
-            <div>
-                <h2>Student SQL File</h2>
-                <textarea name="" id=""></textarea>
+    <main class="section">
+        <div class="columns is-centered sql-form">
+            <div class="column">
+                <h2 class="title">Student SQL File</h2>
+                <textarea id="txtarea-student" class="textarea"></textarea>
             </div>
-            <div>
-                <h2>Correction SQL File</h2>
-                <textarea name="" id=""></textarea>
+            <div class="column is-1"></div>
+            <div class="column">
+                <h2 class="title">Correction SQL File</h2>
+                <textarea id="txtarea-correction" class="textarea"></textarea>
             </div>
         </div>
-        <div>
-            <button>
-                Correct
-            </button>
+        <div class="columns is-centered">
+            <div class="column">
+                <button class="button " id="correction-launch">
+                    Correct
+                </button>
+            </div>
         </div>
-        <div>
-            <h2>Results correction</h2>
-            <div></div>
+        <div class="columns is-centered">
+            <div class="column ">
+                <h2 class="title">Results correction</h2>
+                <pre id="correction-result"></pre>
+            </div>
         </div>
     </main>
 
-    <footer>
+    <footer class="footer">
         FOOTER
     </footer>
 </body>

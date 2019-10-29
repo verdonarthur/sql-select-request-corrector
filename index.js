@@ -1,5 +1,5 @@
 const express = require('express')
-const routes = require('./backend/routes')
+const routes = require('./app/backend/routes')
 
 
 const app = express()
@@ -7,3 +7,7 @@ const app = express()
 app.use('/', express.static('public'))
 
 app.use('api/v1/mssql-corrector', routes.mssqlCorrector)
+
+app.listen('3000', ()=> {
+    console.log('app launched')
+})

@@ -1,0 +1,18 @@
+@charset "utf-8";
+@import "~bulma/bulma";
+
+main {
+    min-height: 100vh;
+}
+
+.sql-form{
+    min-height: 500px;
+    textarea {
+        height: 80%;
+    }
+}
+
+#correction-result {
+    background: black;
+    color:white;
+}
