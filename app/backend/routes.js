@@ -4,8 +4,15 @@ const MSSQLCorrectorController = require('./controller/mssql-corrector.controlle
 
 const mssqlCorrector = express.Router()
 
-mssqlCorrector.post('/', (res,req) => {
+mssqlCorrector.post('/', async (res, req) => {
+    console.log(req.body)
     
+    //let data = JSON.parse(req.body)
+
+    let responseData = await MSSQLCorrectorController.correct(data.studentFileContent,
+        data.correctionFileContent)
+
+    res.json(responseData)
 })
 
 

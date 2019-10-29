@@ -3,6 +3,10 @@ const DB_URL = 'mssql://sa:.heig-123@localhost/FabriqueFiltres'
 
 module.exports = class {
 
+    constructor() {
+        
+    }
+
     removeLastOrderBy(slctRqst) {
         if (slctRqst.toUpperCase().lastIndexOf('ORDER') == -1) {
             return slctRqst
