@@ -31,7 +31,7 @@ module.exports = class {
     }
 
     sanitizeRequest(slctRqst) {
-        return removeLastOrderBy(removeAllComent(slctRqst))
+        return this.removeLastOrderBy(this.removeAllComent(slctRqst))
     }
 
     /**
@@ -64,11 +64,21 @@ module.exports = class {
 
         fileContent.split(';').forEach((rqst) => {
             if (rqst.toUpperCase().indexOf('SELECT') != -1) {
-                tabRqst.push(sanitizeRequest(rqst))
+                tabRqst.push(this.sanitizeRequest(rqst))
             }
         })
 
         return tabRqst
+    }
+
+    sanitizeFileContent(fileContent) {
+        let sanitizedFile = ""
+
+        this.transformFileContentInTabOfRequest(fileContent).forEach(rqst => {            
+            sanitizedFile+=`${rqst}\n`
+        })
+
+        return sanitizedFile
     }
 
     async correctFile(studentFileContent, correctionFileContent) {

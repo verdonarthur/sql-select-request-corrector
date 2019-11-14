@@ -7,7 +7,11 @@ module.exports = class {
     }
     
     
-    static async correct(correctionFileContent, studentFileContent) {
+    async correct(correctionFileContent, studentFileContent) {
         return await this.sqlCorrector.correctFile(studentFileContent, correctionFileContent)
+    }
+
+    sanitizeFileContent(fileContent) {
+        return this.sqlCorrector.sanitizeFileContent(fileContent)        
     }
 }
