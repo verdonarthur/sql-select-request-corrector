@@ -1,50 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>SQL REQUEST CORRECTOR</title>
 
     <script src="./js/build.js"></script>
-</head>
+  </head>
 
-<body>
+  <body>
     <header>
-        <nav class="navbar">NAV</nav>
+      <nav class="navbar">NAV</nav>
     </header>
 
     <main class="section">
-        <div class="columns is-centered sql-form">
-            <div class="column">
-                <h2 class="title">Student SQL File</h2>
-                <textarea id="txtarea-student" class="textarea"></textarea>
-            </div>
-            <div class="column is-1"></div>
-            <div class="column">
-                <h2 class="title">Correction SQL File</h2>
-                <textarea id="txtarea-correction" class="textarea"></textarea>
-            </div>
+      <div class="columns is-centered sql-form">
+        <div class="column">
+          <h2 class="title">Student SQL File</h2>
+          <input type="file" id="input-file-student" />
+          <ul id="request-student"></ul>
         </div>
-        <div class="columns is-centered">
-            <div class="column">
-                <button class="button " id="correction-launch">
-                    Correct
-                </button>
-            </div>
+        <div class="column is-1"></div>
+        <div class="column">
+          <h2 class="title">Correction SQL File</h2>
+          <input type="file" id="input-file-correction" />
+          <ul id="request-correction">
+            <li class="card card-request">
+              <div class="card-content"><p class="title"></p></div>
+              <div class="card-content request-content"></div>
+            </li>
+          </ul>
         </div>
-        <div class="columns is-centered">
-            <div class="column ">
-                <h2 class="title">Results correction</h2>
-                <pre id="correction-result"></pre>
-            </div>
+      </div>
+      <div class="columns is-centered">
+        <div class="column">
+          <button class="button " id="correction-launch">
+            Correct
+          </button>
         </div>
+      </div>
+      <div class="columns is-centered">
+        <div class="column ">
+          <h2 class="title">Results correction</h2>
+          <pre id="correction-result"></pre>
+        </div>
+      </div>
     </main>
 
     <footer class="footer">
-        FOOTER
+      FOOTER
     </footer>
-</body>
-
+  </body>
 </html>

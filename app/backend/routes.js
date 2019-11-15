@@ -20,11 +20,10 @@ mssqlCorrector.post("/", async (req, res) => {
 });
 
 mssqlCorrector.post("/sanitizeFile", async (req, res) => {
-  //console.log(req.body);
 
-  let sanitizedFileContent = mssqlCorrectorController.sanitizeFileContent(req.body.fileContent)
+  let requests = mssqlCorrectorController.sanitizeFileContent(req.body.fileContent)
 
-  res.json({sanitizedFileContent:sanitizedFileContent})
+  res.json({requests:requests})
 });
 
 module.exports = {

@@ -12,6 +12,6 @@ module.exports = class {
     }
 
     sanitizeFileContent(fileContent) {
-        return this.sqlCorrector.sanitizeFileContent(fileContent)        
+        return this.sqlCorrector.transformFileContentInTabOfRequest(fileContent)        
     }
 }

@@ -2,17 +2,30 @@
 @import "~bulma/bulma";
 
 main {
-    min-height: 100vh;
+  min-height: 100vh;
 }
 
-.sql-form{
-    min-height: 500px;
-    textarea {
-        height: 80%;
+.sql-form {
+  min-height: 500px;
+
+  #request-student,
+  #request-correction {
+    display: flex;
+    flex-direction: column;
+    margin: 1%;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 1%;
+
+    li.card {
+        margin:20px 10px;
+        padding: 1%;
+        font-family: 'Courier New', Courier, monospace;
     }
+  }
 }
 
 #correction-result {
-    background: black;
-    color:white;
+  background: black;
+  color: white;
 }
