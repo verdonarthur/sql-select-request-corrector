@@ -8,7 +8,7 @@ module.exports = class {
     
     
     async correct(correctionFileContent, studentFileContent) {
-        return await this.sqlCorrector.correctFile(studentFileContent, correctionFileContent)
+        return await this.sqlCorrector.correctTabOfRequests(studentFileContent, correctionFileContent)
     }
 
     sanitizeFileContent(fileContent) {

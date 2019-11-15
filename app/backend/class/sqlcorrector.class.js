@@ -1,9 +1,14 @@
 const sql = require("mssql");
+const Utils = require("../../shared/class/utils.class")
 const DB_URL = "mssql://sa:.heig-123@localhost/FabriqueFiltres";
 
 module.exports = class {
   constructor() {}
 
+  /**
+   *
+   * @param {*} slctRqst
+   */
   removeLastOrderBy(slctRqst) {
     if (slctRqst.toUpperCase().lastIndexOf("ORDER") == -1) {
       return slctRqst;
@@ -12,58 +17,49 @@ module.exports = class {
     return slctRqst.substring(0, slctRqst.toUpperCase().lastIndexOf("ORDER"));
   }
 
+  /**
+   *
+   * @param {*} slctRqst
+   */
   removeAllComent(slctRqst) {
     let newSelectRqst = "";
-    const NEWLINE_CHAR = slctRqst.includes('\r\n') ? '\r\n' : '\n'
+    const NEWLINE_CHAR = slctRqst.includes("\r\n") ? "\r\n" : "\n";
 
     let tabLine = slctRqst.split(NEWLINE_CHAR);
 
     tabLine.forEach((line, i) => {
       if (!line.includes("--")) {
-        newSelectRqst += line + " ";        
+        newSelectRqst += line + " ";
       }
     });
 
     return newSelectRqst;
   }
 
+  /**
+   *
+   * @param {*} slctRqst
+   */
   sanitizeRequest(slctRqst) {
     let sanitizedRqst = this.removeAllComent(slctRqst);
-    sanitizedRqst = sanitizedRqst.replace('\t','')
+    sanitizedRqst = sanitizedRqst.replace("\t", "");
 
     return sanitizedRqst;
   }
 
   /**
    *
-   * @param {*} correctRequest
-   * @param {*} studentRequest
-   * @param {*} sqlConnection
+   * @param {*} fileContent
    */
-  async isCorrect(correctRequest, studentRequest, sqlConnection) {
-    try {
-      const result = await sqlConnection.request().query(`
-            ${correctRequest}
-            \nEXCEPT\n
-            ${studentRequest}
-        `);
-
-      return result.recordsets[0].length == 0;
-    } catch (err) {
-      if (err instanceof sql.RequestError && err.code === "EREQUEST") {
-        console.log(err.message);
-      }
-
-      return false;
-    }
-  }
-
   transformFileContentInTabOfRequest(fileContent) {
     let tabRqst = [];
     const tabRqstFileContent = fileContent.split(";");
 
     tabRqstFileContent.forEach((rqst, i) => {
-      if (rqst.toUpperCase().indexOf("SELECT") != -1 && i < tabRqstFileContent.length - 2) {
+      if (
+        rqst.toUpperCase().indexOf("SELECT") != -1 &&
+        i < tabRqstFileContent.length - 2
+      ) {
         tabRqst.push(this.sanitizeRequest(rqst));
       }
     });
@@ -71,46 +67,47 @@ module.exports = class {
     return tabRqst;
   }
 
-  async correctFile(studentFileContent, correctionFileContent) {
-    let result = {};
-
-    let tabsCorrectRequest = transformFileContentInTabOfRequest(
-      correctionFileContent
-    );
-    let tabsStudentRequest = transformFileContentInTabOfRequest(
-      studentFileContent
-    );
-
+  async isRequestCorrect(studentRqst, correctRqst) {
     let pool = new sql.ConnectionPool(DB_URL);
+    let sqlConnection = await pool.connect();
 
-    pool
-      .connect()
-      .then(async sqlConnection => {
-        await asyncForEach(tabsCorrectRequest, async (correctRqst, i) => {
-          let studentRqst = tabsStudentRequest[i];
+    try {
+      const result = await sqlConnection.request().query(`
+              ${this.removeLastOrderBy(correctRqst)}
+              \nEXCEPT\n
+              ${this.removeLastOrderBy(studentRqst)}
+          `);
 
-          result[`question-${i + 1}`] = {
-            studentRqst: studentRqst,
-            correctRqst: correctRqst,
-            result: false
-          };
+      return result.recordsets[0].length == 0;
+    } catch (err) {
+      if (err instanceof sql.RequestError && err.code === "EREQUEST") {
+        console.error(err.message);
+      }
 
-          if (await this.isCorrect(correctRqst, studentRqst, sqlConnection)) {
-            console.log(`Question ${i + 1} : [✔]`);
-            result[`question-${i + 1}`].result = true;
-          } else {
-            console.log(`Question ${i + 1} : [X]`);
-            result[`question-${i + 1}`].result = false;
-          }
-        });
-
-        pool.close();
-
-        return result;
-      })
-      .catch(err => {
-        console.error("ERROR CONNECT ", err);
-        return { error: err };
-      });
+      return false;
+    }
   }
+
+  /**
+   *
+   * @param {*} tabRqstStudent
+   * @param {*} tabRqstCorrection
+   */
+  async correctTabOfRequests(tabRqstStudent, tabRqstCorrection) {
+    let tabResultCorrection = [];
+    
+    await Utils.asyncForEach(tabRqstCorrection, async (correctedRqst, i) => {
+      if (
+        tabRqstStudent[i] &&
+        (await this.isRequestCorrect(tabRqstStudent[i], correctedRqst))
+      ) {
+        tabResultCorrection.push(true);
+      } else {
+        tabResultCorrection.push(false);
+      }
+    });
+
+    return tabResultCorrection;
+  }
+
 };

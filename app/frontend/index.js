@@ -10,7 +10,7 @@ let tabRqstsStudent = [];
 const jsonPost = async (url, body) => {
   let response = await fetch(url, {
     method: "POST",
-    body: body,
+    body: JSON.stringify(body),
     headers: {
       "Content-Type": "application/json"
     }
@@ -30,24 +30,21 @@ const loadFileContent = async (
   let fr = new FileReader();
 
   fr.onload = async () => {
-    const data = await jsonPost(
-      URL_API + "/mssql-corrector/sanitizeFile",
-      JSON.stringify({
-        fileContent: fileContent
-      })
-    );
+    const data = await jsonPost(URL_API + "/mssql-corrector/sanitizeFile", {
+      fileContent: fr.result
+    });
 
     if (data.requests) {
       divToLoadContent.text("");
       data.requests.forEach((rqst, i) => {
         let divRqst = tpmToUse.clone();
-        $(".title", divRqst).text(`Request : ${i + 1}`);
+        $(".title", divRqst).text(`Request: ${i + 1}`);
         $(".request-content", divRqst).text(rqst);
 
         divToLoadContent.append(divRqst);
       });
 
-      fncCallback(data.req);
+      fncCallback(data.requests);
       return;
     }
     fncCallback([]);
@@ -95,16 +92,24 @@ $(() => {
   });
 
   BTN_LAUNCH_CORRECTION.on("click", async () => {
-    const data = await jsonPost(
-      URL_API + "/mssql-corrector/correct",
-      JSON.stringify({
-        tabRqstsStudent: tabRqstsStudent,
-        tabRqstsCorrection: tabRqstsCorrection
-      })
-    );
+    const data = await jsonPost(URL_API + "/mssql-corrector/correct", {
+      tabRqstsStudent: tabRqstsStudent,
+      tabRqstsCorrection: tabRqstsCorrection
+    });
 
     console.log(data);
 
-    CONTENT_RSLT.text(data);
+    if (data[0] !== undefined) {
+      data.forEach((rsltRqst, i) => {
+        if (RQST_STUDENT.children()[i] && RQST_CORRECTION.children()[i]) {
+          let classToAdd = rsltRqst
+            ? "card-request-valid"
+            : "card-request-invalid";
+          $(RQST_STUDENT.children()[i]).addClass(classToAdd);
+          $(RQST_CORRECTION.children()[i]).addClass(classToAdd);
+        }
+      });
+      CONTENT_RSLT.text(data);
+    }
   });
 });

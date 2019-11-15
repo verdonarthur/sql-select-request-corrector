@@ -3,6 +3,13 @@
 
 main {
   min-height: 100vh;
+  background: #33332d;
+  font-family: "Courier New", Courier, monospace;
+  color: white;
+
+  .title {
+    color: white;
+  }
 }
 
 .sql-form {
@@ -13,14 +20,36 @@ main {
     display: flex;
     flex-direction: column;
     margin: 1%;
-    border: 1px solid black;
+    border: 1px solid whitesmoke;
     border-radius: 5px;
     padding: 1%;
 
     li.card {
-        margin:20px 10px;
+      margin: 10px 10px;
+      padding: 1%;
+      font-family: "Courier New", Courier, monospace;
+
+      background: #33332d;
+      border: 1px solid whitesmoke;
+      border-radius: 20px;
+
+      .title {
+        font-size: 1.2em;
+      }
+
+      .request-content {
+        background: black;
+        color: white;
+        border-radius: 20px;
         padding: 1%;
-        font-family: 'Courier New', Courier, monospace;
+      }
+    }
+
+    li.card.card-request-valid {
+      background: greenyellow;
+    }
+    li.card.card-request-invalid {
+      background: red;
     }
   }
 }
@@ -28,4 +57,5 @@ main {
 #correction-result {
   background: black;
   color: white;
+  border: 1px solid whitesmoke;
 }
